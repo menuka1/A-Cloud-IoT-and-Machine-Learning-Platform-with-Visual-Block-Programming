@@ -1,0 +1,34 @@
+# Plain:   docker compose up -d --build               -> http://localhost:3000  (+ MQTT on 1883)
+# HTTPS:   DOMAIN=iot.example.com docker compose --profile https up -d --build
+#          (Caddy gets a free Let's Encrypt certificate; DNS for DOMAIN must point at this server,
+#           ports 80/443 open.)  Set JWT_SECRET in a .env file next to this file.
+services:
+  tronic:
+    build: .
+    restart: unless-stopped
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-}
+      TRUST_PROXY: ${TRUST_PROXY:-}
+    ports:
+      - "${HTTP_PORT:-3000}:3000"
+      - "1883:1883"
+    volumes:
+      - tronic-data:/data
+
+  caddy:
+    image: caddy:2-alpine
+    profiles: ["https"]
+    restart: unless-stopped
+    depends_on: [tronic]
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+
+volumes:
+  tronic-data:
+  caddy-data:

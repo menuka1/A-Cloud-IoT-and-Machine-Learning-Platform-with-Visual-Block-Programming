@@ -1,0 +1,22 @@
+{
+  "name": "tronic-iot",
+  "version": "1.0.0",
+  "description": "TronicIOT - IoT dashboard + cloud ML platform",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node server/selftest.js && node server/builder-test.js && node server/library-test.js && node server/i2c-test.js", "test:i2c": "node server/i2c-test.js", "test:library": "node server/library-test.js", "test:builder": "node server/builder-test.js", "simulate": "node tools/simulate.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "aedes": "^1.2.0",
+    "bcryptjs": "^3.0.3",
+    "chart.js": "^4.6.2",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "ws": "^8.23.0"
+  }
+}
